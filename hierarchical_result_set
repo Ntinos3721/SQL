@@ -1,0 +1,18 @@
+DECLARE @currentId int = 1696
+
+-- CTE to prepare hierarchical result set
+;WITH #results AS
+(
+    SELECT  [Id], 
+            [ParentUnitId]
+    FROM    [dbo].[BNK_Units]
+    WHERE   [Id] = @currentId
+    UNION ALL
+    SELECT  t.[Id], 
+            t.[ParentUnitId]
+    FROM    [dbo].[BNK_Units] t
+    INNER JOIN #results r ON r. [ParentUnitId] = t.[Id]
+)
+
+SELECT  *
+FROM  #results;
